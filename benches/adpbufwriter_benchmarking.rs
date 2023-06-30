@@ -57,8 +57,8 @@ fn adpbufwriter_benchmark(c: &mut Criterion) {
 
 criterion_group!(
     benches,
-    bufwriter8kb_benchmark,
     bufwriter16kb_benchmark,
+    bufwriter8kb_benchmark,
     // adpbufwriter_benchmark
 );
 criterion_main!(benches);
