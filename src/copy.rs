@@ -134,27 +134,27 @@ where
     R: Read + ?Sized,
     W: Write + ?Sized,
 {
-    // let buf = ReadBuf::new(MaybeUninit::uninit_array());
-    // let mut buf: ReadBuf<'_> = buf.into();
+    let buf = ReadBuf::new(MaybeUninit::new());
+    let mut buf: ReadBuf<'_> = buf.into();
 
-    // let mut len = 0;
+    let mut len = 0;
 
-    // loop {
-    //     match reader.read_buf(buf.unfilled()) {
-    //         Ok(()) => {}
-    //         Err(e) if e.kind() == ErrorKind::Interrupted => continue,
-    //         Err(e) => return Err(e),
-    //     };
+    loop {
+        match reader.read_buf(buf.unfilled()) {
+            Ok(()) => {}
+            Err(e) if e.kind() == ErrorKind::Interrupted => continue,
+            Err(e) => return Err(e),
+        };
 
-    //     if buf.filled().is_empty() {
-    //         break;
-    //     }
+        if buf.filled().is_empty() {
+            break;
+        }
 
-    //     len += buf.filled().len() as u64;
-    //     writer.write_all(buf.filled())?;
-    //     buf.clear();
-    // }
+        len += buf.filled().len() as u64;
+        writer.write_all(buf.filled())?;
+        buf.clear();
+    }
 
-    // Ok(len)
-    todo!()
+    Ok(len)
+    // todo!()
 }
