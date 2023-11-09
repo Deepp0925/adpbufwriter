@@ -1,4 +1,4 @@
-use std::time::Instant;
+use std::{io::Write, time::Instant};
 
 // this will generate random data of 10MB to be written to the file
 fn generate_data() -> Vec<u8> {
@@ -13,14 +13,20 @@ fn write_buf_writer(mut data: &[u8], dst: &str, size: usize) {
     let file = std::fs::File::create(dst).unwrap();
     let mut writer = std::io::BufWriter::with_capacity(size, file);
     let start: Instant = Instant::now();
-    std::io::copy(&mut data, &mut writer).unwrap();
+    writer.write_all(data).unwrap();
+    // std::io::copy(&mut data, &mut writer).unwrap();
     let duration = start.elapsed();
-    println!("Time elapsed for {}kb copy is: {:?}", size / 1024, duration);
+    println!(
+        "Time elapsed for {}kb copy: {:?} - speed: {}",
+        size / 1024,
+        duration.as_millis(),
+        size as u128 / duration.as_millis()
+    );
 }
 
 #[test]
 fn bufwriter_test() {
-    let dst = "/Volumes/PNY 2/adpbufwriter_test_dst/bufwriter.txt";
+    let dst = "./somefile.txt";
     let data = generate_data();
 
     // warm up

@@ -1,15 +1,18 @@
-use std::io::Write;
+use std::io::{Result as StdIOResult, Write as StdWrite};
 
-pub struct AdpBufWriter<W: Write> {
+use crate::perf::PerfTracker;
+
+pub struct AdpBufWriter<W, const N: usize> {
     inner: W,
+    perf_tracker: PerfTracker<N>,
 }
 
-impl<W: Write> Write for AdpBufWriter<W> {
-    fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
+impl<W: StdWrite, const N: usize> StdWrite for AdpBufWriter<W, N> {
+    fn write(&mut self, buf: &[u8]) -> StdIOResult<usize> {
         self.inner.write(buf)
     }
 
-    fn flush(&mut self) -> std::io::Result<()> {
+    fn flush(&mut self) -> StdIOResult<()> {
         todo!()
     }
 }
