@@ -1,8 +1,7 @@
 use crate::buf_sizes::BufSizes;
 
-use self::speed::Speed;
-
 mod speed;
+pub use speed::{BufSizeType, Speed};
 
 /// maximum number of times the performance is allowed to dip below the average
 /// before we decrease the buffer size

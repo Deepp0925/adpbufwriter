@@ -1,9 +1,6 @@
 mod adp_buf_writer;
 mod buf_sizes;
-mod copy;
 mod perf;
-mod read_buf;
-mod sizes;
 // use std::io::{self, copy, Write};
 
 // struct AdaptiveBufferedWriter<W: Write> {

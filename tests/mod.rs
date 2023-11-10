@@ -1,5 +1,20 @@
 use std::{io::Write, time::Instant};
 
+struct TestWrite<W> {
+    inner: W,
+}
+
+impl<W: Write> Write for TestWrite<W> {
+    fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
+        println!("to write: {:?}", buf.len());
+        self.inner.write(buf)
+    }
+
+    fn flush(&mut self) -> std::io::Result<()> {
+        self.inner.flush()
+    }
+}
+
 // this will generate random data of 10MB to be written to the file
 fn generate_data() -> Vec<u8> {
     let mut data = Vec::with_capacity(10 * 1024 * 1024);
@@ -11,13 +26,15 @@ fn generate_data() -> Vec<u8> {
 
 fn write_buf_writer(mut data: &[u8], dst: &str, size: usize) {
     let file = std::fs::File::create(dst).unwrap();
-    let mut writer = std::io::BufWriter::with_capacity(size, file);
+    let mut writer = TestWrite {
+        inner: std::io::BufWriter::with_capacity(size, file),
+    };
     let start: Instant = Instant::now();
     writer.write_all(data).unwrap();
     // std::io::copy(&mut data, &mut writer).unwrap();
     let duration = start.elapsed();
     println!(
-        "Time elapsed for {}kb copy: {:?} - speed: {}",
+        "Time elapsed for {}kb copy: {:?}ms - speed: {}",
         size / 1024,
         duration.as_millis(),
         size as u128 / duration.as_millis()
