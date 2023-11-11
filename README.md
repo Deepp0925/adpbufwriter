@@ -1,3 +1,5 @@
+**_Note_**: This crate has been archived due to specific use case. This will be part of the a different application in the future.
+
 # Adaptive Buffer Writer
 
 Adaptive Buffer Writer is like `std::io::BufWriter` with a flexible internal buffer.
